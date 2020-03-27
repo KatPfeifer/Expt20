@@ -150,16 +150,6 @@ export default class MainScene extends Phaser.Scene {
   
 
     this.physics.add.overlap(this.otherbox, this.pHmeter, this.updatepH, undefined, this);
-
-    //this.player=this.physics.add.image(this.scale.width/2, this.scale.height-64, "dog");
-    //this.player.setScale(.1);
-    //this.cursorKeys=this.input.keyboard.createCursorKeys();
-  
-    //this.scoreLabel=this.add.bitmapText(10,5,"pixelFont", "SCORE", 16);
-    //this.score=0;
-    //this.scoreLabel.text="SCORE: "+ this.score;
-
-    //this.physics.add.overlap(this.phmeter, this.liquid, this.calculateph, undefined, this);
   } 
 
   update() {
@@ -327,22 +317,4 @@ export default class MainScene extends Phaser.Scene {
   enterButton8RestState(){
     this.waterButton.setStyle({fill: '#0f0'});
   }
-  /*
-  movePlayerManager(){
-    if (this.cursorKeys.left.isDown){
-      //this.player.setVelocityX(-this.playerspeed);
-    } else if (this.cursorKeys.right.isDown){
-      //this.player.setVelocityX(this.playerspeed);
-    } else {
-      //this.player.setVelocityX(0);
-    }
-    if (this.cursorKeys.down.isDown){
-      //this.player.setVelocityY(this.playerspeed);
-    } else if (this.cursorKeys.up.isDown){
-      //this.player.setVelocityY(-this.playerspeed);
-    } else {
-      //this.player.setVelocityY(0);
-    }
-  }
-  */
 }

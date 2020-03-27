@@ -1,0 +1,1 @@
+An activity demonstrating experiment 20 of Chem102 using Phaser 3, TypeScript, and Webpack.
