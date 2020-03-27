@@ -28,12 +28,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "assets/font/font1_0.tga"
   },
   {
+    "revision": "bcdf1f211199d50dc3f43b2c99b2427c",
+    "url": "assets/images/acidButton.png"
+  },
+  {
     "revision": "72bd715c5f5b749b97b009226dcb800a",
     "url": "assets/images/background.png"
   },
   {
     "revision": "9fd0dcea47820063efe7dabd12e32b87",
     "url": "assets/images/background2.png"
+  },
+  {
+    "revision": "8531c06839fa99c6341e5cf88deef39c",
+    "url": "assets/images/baseButton.png"
   },
   {
     "revision": "2279af78414d2000f96531339a929c76",
@@ -58,6 +66,34 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "0ff88c3072eb95face880a8b7479d9d8",
     "url": "assets/images/dogleft.png"
+  },
+  {
+    "revision": "ece9f6a89701e7803d4cc03409905a6a",
+    "url": "assets/images/emptybeaker.png"
+  },
+  {
+    "revision": "1773793d37e757bae5a2151cd71f6002",
+    "url": "assets/images/filledbeaker.png"
+  },
+  {
+    "revision": "79631a0eff994960975a76709c8a9632",
+    "url": "assets/images/hydroxides.png"
+  },
+  {
+    "revision": "d336d87ee02d3d96e6cc6337f339d7dc",
+    "url": "assets/images/pHmeter.png"
+  },
+  {
+    "revision": "9ffc14c49357217b96b74c6b5b0072af",
+    "url": "assets/images/protons.png"
+  },
+  {
+    "revision": "e28a869994dfc7061a2b9bf2061c2658",
+    "url": "assets/images/reset.png"
+  },
+  {
+    "revision": "81d71a48fb1f1ffd39c5ef3b7f06de1f",
+    "url": "assets/images/resetButton.png"
   },
   {
     "revision": "e98cade8881032fc4236e51482bb3d82",
@@ -96,12 +132,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "assets/spritesheets/ship3.png"
   },
   {
-    "revision": "04c4dd76345a8b85d6d22cb699b33080",
+    "revision": "f58b9a46605de3b98842a6d26542a43d",
     "url": "index.html"
   },
   {
-    "revision": "85e4cec8c4ebd0091945",
-    "url": "main.0e873be399cf0bb3f575.bundle.js"
+    "revision": "c1830f5144f843c169f4",
+    "url": "main.61c0474f5992048e0fa1.bundle.js"
   },
   {
     "revision": "b4321e6f6a88a978d4964c0d1b432b03",
