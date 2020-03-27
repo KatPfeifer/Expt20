@@ -12,6 +12,7 @@ export default class MainScene extends Phaser.Scene {
   private ammoniumNitrateButton: any;
   private sodiumAcetateButton: any;
   private sodiumChlorideButton: any;
+  private waterButton: any;
   private compound: any;
   private pHlabel: any;
   private pH: any;
@@ -21,6 +22,13 @@ export default class MainScene extends Phaser.Scene {
   private filledbeaker: any;
   private pHmeter: any;
   private notUpdated: boolean;
+  private resetButton: any;
+  private acidButton: any;
+  private baseButton: any;
+  private acidAdded: any;
+  private baseAdded: any;
+  private protons: any;
+  private hydroxides: any;
 
   constructor() {
     super({ key: 'MainScene' });
@@ -29,6 +37,9 @@ export default class MainScene extends Phaser.Scene {
 
   create() {
     this.notUpdated=true;
+    this.acidAdded=false;
+    this.baseAdded=false;
+
     this.add.text(5, 10, "Experiment 20: pH and its Applications", {fill: "#000000", fontSize: '16px'});
     this.add.text(5, 40, "Select a \ncompound:", {fill: "#0000ff", fontSize: "12px"});
     this.box=this.add.image(75,360,"bluebackground");
@@ -39,6 +50,13 @@ export default class MainScene extends Phaser.Scene {
     this.otherbox.setScale(0.05);
     this.otherbox.setAlpha(0.0);
 
+    this.pHmeter=this.physics.add.image(300, 100, "pHmeter");
+    this.pHmeter.setScale(0.8);
+    this.pHmeter.setInteractive();
+    this.input.setDraggable(this.pHmeter);
+
+    this.input.on('drag', this.doDrag, this)
+
     this.beakerimage=this.add.image(300, 300, "emptybeaker");
     this.beakerimage.setScale(0.4);
     this.beakerimage.setAlpha(1);
@@ -46,8 +64,29 @@ export default class MainScene extends Phaser.Scene {
     this.filledbeaker=this.add.image(300, 300, "filledbeaker");
     this.filledbeaker.setScale(0.4);
     this.filledbeaker.setAlpha(0.0);
+
+    this.protons=this.add.image(300, 350, "protons");
+    this.protons.setScale(0.5);
+    this.protons.setAlpha(0);
+
+    this.hydroxides=this.add.image(300,350, "hydroxides");
+    this.hydroxides.setScale(0.5);
+    this.hydroxides.setAlpha(0);
     
-    
+    this.resetButton=this.add.image(140, 60, "resetbutton")
+     .setInteractive()
+     .on('pointerdown', ()=>this.reset());
+    this.resetButton.setScale(0.8);
+
+    this.acidButton=this.add.image(140, 120, "acidButton")
+     .setInteractive()
+     .on('pointerdown', ()=>this.addAcid());
+    this.acidButton.setScale(0.8);
+
+    this.baseButton=this.add.image(140, 180, "baseButton")
+     .setInteractive()
+     .on('pointerdown', ()=>this.addBase());
+    this.baseButton.setScale(0.8);
 
     this.unknown1button= this.add.text(5, 75, "20-39X", {fill: "#0f0"})
      .setInteractive()
@@ -56,41 +95,47 @@ export default class MainScene extends Phaser.Scene {
      .on('pointerout', ()=>this.enterButton1RestState());
 
   
-    this.unknown2button=this.add.text(5, 105, "20-40X", {fill: "#0f0"})
+    this.unknown2button=this.add.text(5, 100, "20-40X", {fill: "#0f0"})
      .setInteractive()
      .on('pointerdown', ()=>this.updateCompound("unknown 2"))
      .on('pointerover', ()=>this.enterButton2HoverState())
      .on('pointerout', ()=>this.enterButton2RestState());
 
-    this.unknown3button=this.add.text(5, 135, "20-77X", {fill: "#0f0"})
+    this.unknown3button=this.add.text(5, 125, "20-77X", {fill: "#0f0"})
      .setInteractive()
      .on('pointerdown', ()=>this.updateCompound("unknown 3"))
      .on('pointerover', ()=>this.enterButton3HoverState())
      .on('pointerout', ()=>this.enterButton3RestState());
     
-    this.unknown4button=this.add.text(5, 165, "20-87X", {fill: "#0f0"})
+    this.unknown4button=this.add.text(5, 150, "20-87X", {fill: "#0f0"})
      .setInteractive()
      .on('pointerdown', ()=>this.updateCompound("unknown 4"))
      .on('pointerover', ()=>this.enterButton4HoverState())
      .on('pointerout', ()=>this.enterButton4RestState());
     
-    this.ammoniumNitrateButton=this.add.text(5, 195, "NH4NO3", {fill: "#0f0"})
+    this.ammoniumNitrateButton=this.add.text(5, 175, "NH4NO3", {fill: "#0f0"})
      .setInteractive()
      .on('pointerdown', ()=>this.updateCompound("ammonium nitrate"))
      .on('pointerover', ()=>this.enterButton5HoverState())
      .on('pointerout', ()=>this.enterButton5RestState());
 
-    this.sodiumAcetateButton=this.add.text(5, 225, "NaC2H3O2", {fill: "#0f0"})
+    this.sodiumAcetateButton=this.add.text(5, 200, "NaC2H3O2", {fill: "#0f0"})
      .setInteractive()
      .on('pointerdown', ()=>this.updateCompound("sodium acetate"))
      .on('pointerover', ()=>this.enterButton6HoverState())
      .on('pointerout', ()=>this.enterButton6RestState());
 
-    this.sodiumChlorideButton=this.add.text(5, 255, "NaCl", {fill: "#0f0"})
+    this.sodiumChlorideButton=this.add.text(5, 225, "NaCl", {fill: "#0f0"})
      .setInteractive()
      .on('pointerdown', ()=>this.updateCompound("sodium chloride"))
      .on('pointerover', ()=>this.enterButton7HoverState())
      .on('pointerout', ()=>this.enterButton7RestState());
+
+    this.waterButton=this.add.text(5, 250, "H2O", {fill: "#0f0"})
+     .setInteractive()
+     .on('pointerdown', ()=>this.updateCompound("water"))
+     .on('pointerover', ()=>this.enterButton8HoverState())
+     .on('pointerout', ()=>this.enterButton8RestState());
 
     this.pHlabel=this.add.bitmapText(30, 350, "pixelFont", "pH: ", 40);
     this.pH="-.--"
@@ -102,12 +147,7 @@ export default class MainScene extends Phaser.Scene {
     this.compoundLabel.fontSize=20;
     this.compoundLabel.text=this.compound + " has \nbeen selected";
 
-    this.pHmeter=this.physics.add.image(300, 100, "pHmeter");
-    this.pHmeter.setScale(0.8);
-    this.pHmeter.setInteractive();
-    this.input.setDraggable(this.pHmeter);
-
-    this.input.on('drag', this.doDrag, this)
+  
 
     this.physics.add.overlap(this.otherbox, this.pHmeter, this.updatepH, undefined, this);
 
@@ -127,6 +167,32 @@ export default class MainScene extends Phaser.Scene {
     this.displaySelected();
   }
 
+  addAcid(){
+    this.hydroxides.setAlpha(0.0);
+    this.acidAdded=true;
+    this.protons.setAlpha(1.0);
+    this.notUpdated=true;
+  }
+
+  addBase(){
+    this.protons.setAlpha(0.0);
+    this.baseAdded=true;
+    this.hydroxides.setAlpha(1.0);
+    this.notUpdated=true;
+  }
+
+  reset(){
+    this.filledbeaker.setAlpha(0);
+    this.beakerimage.setAlpha(1);
+    this.compound="N/A";
+    this.notUpdated=true;
+    this.updatepH();
+    this.acidAdded=false;
+    this.baseAdded=false;
+    this.protons.setAlpha(0.0);
+    this.hydroxides.setAlpha(0.0);
+  }
+
   displaySelected(){
     if (this.compound !== "N/A"){
       this.compoundLabel.setText(this.compound + " has \nbeen selected");
@@ -143,6 +209,12 @@ export default class MainScene extends Phaser.Scene {
 
   updateCompound(name){
     this.compound=name;
+    this.acidAdded=false;
+    this.baseAdded=false;
+    this.protons.setAlpha(0.0);
+    this.hydroxides.setAlpha(0.0);
+    this.notUpdated=true;
+    this.pH="-.--";
   }
 
   updatepH(){
@@ -151,10 +223,43 @@ export default class MainScene extends Phaser.Scene {
       this.pH=(1.92+x).toString().substring(0,4);
       this.notUpdated=false;
     }
-    if (this.compound==="unknown 2"){
-      this.pH="4.1";
+    if (this.compound==="unknown 2"&& this.notUpdated){
+      this.pH=(4.1+x).toString().substring(0,4);
+      this.notUpdated=false;
     }
-    if (this.compound==="null"){
+    if (this.compound==="unknown 3"&&this.notUpdated){
+      this.pH=(5.51+x).toString().substring(0,4);
+      this.notUpdated=false;
+    }
+    if (this.compound==="unknown 4"&&this.notUpdated){
+      this.pH=(6.91+x).toString().substring(0,4);
+      this.notUpdated=false;
+    }
+    if (this.compound==="ammonium nitrate"&&this.notUpdated){
+      this.pH=(5.15+x).toString().substring(0,4);
+      this.notUpdated=false;
+    }
+    if (this.compound==="sodium acetate"&&this.notUpdated){
+      this.pH=(8.87+x).toString().substring(0,4);
+      this.notUpdated=false;
+    }
+    if (this.compound==="sodium chloride"&&this.notUpdated){
+      this.pH=(7+x).toString().substring(0,4);
+      this.notUpdated=false;
+    }
+    if (this.compound==="water"&&this.notUpdated){
+      if (this.acidAdded){
+        this.pH=(3+x).toString().substring(0,4);
+      }
+      if (this.baseAdded){
+        this.pH=(11+x).toString().substring(0,4);
+      }
+      if ((!this.acidAdded)&&(!this.baseAdded)) {
+        this.pH=(7+x).toString().substring(0,4);
+      }
+      this.notUpdated=false;
+    }
+    if (this.compound==="N/A"){
       this.pH="-.--";
     }
   }
@@ -215,6 +320,13 @@ export default class MainScene extends Phaser.Scene {
     this.sodiumChlorideButton.setStyle({fill: '#0f0'});
   }
 
+  enterButton8HoverState(){
+    this.waterButton.setStyle({fill: '#ff0'});
+  }
+
+  enterButton8RestState(){
+    this.waterButton.setStyle({fill: '#0f0'});
+  }
   /*
   movePlayerManager(){
     if (this.cursorKeys.left.isDown){
