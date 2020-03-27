@@ -20,6 +20,14 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "assets/font/font.xml"
   },
   {
+    "revision": "4d281da4e304fe0c6685980410b4e013",
+    "url": "assets/font/font1.fnt"
+  },
+  {
+    "revision": "0ffc387c86f229b2ef1e443e5d2d6910",
+    "url": "assets/font/font1_0.tga"
+  },
+  {
     "revision": "72bd715c5f5b749b97b009226dcb800a",
     "url": "assets/images/background.png"
   },
@@ -30,6 +38,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "2279af78414d2000f96531339a929c76",
     "url": "assets/images/bee.png"
+  },
+  {
+    "revision": "4f9cbd0e5ea9dbbdb99af5748ae982f8",
+    "url": "assets/images/bluebackground.jpg"
   },
   {
     "revision": "3219fdadc471233be3e89acd0d1a05af",
@@ -84,12 +96,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "assets/spritesheets/ship3.png"
   },
   {
-    "revision": "d10e1144ef63befb73d31f427f6ec93a",
+    "revision": "04c4dd76345a8b85d6d22cb699b33080",
     "url": "index.html"
   },
   {
-    "revision": "1ed65fd840df9433d568",
-    "url": "main.045ac2fb405ab8772122.bundle.js"
+    "revision": "85e4cec8c4ebd0091945",
+    "url": "main.0e873be399cf0bb3f575.bundle.js"
   },
   {
     "revision": "b4321e6f6a88a978d4964c0d1b432b03",
