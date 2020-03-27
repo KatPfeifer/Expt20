@@ -4,17 +4,18 @@ import { Beam } from '../objects/Beam';
 
 export default class MainScene extends Phaser.Scene {
   private background: any;
-  private player: any;
-  private cursorKeys: any;
-  private tennisball: any;
-  private bee: any;
-  private playerspeed: any;
-  private chocolate: any;
-  private bone: any;
-  private scoreLabel: any;
-  private score: any;
-  private bark: any;
-  private music: any;
+  private box: any;
+  private unknown1button: any;
+  private unknown2button: any;
+  private unknown3button: any;
+  private unknown4button: any;
+  private ammoniumNitrateButton: any;
+  private sodiumAcetateButton: any;
+  private sodiumChlorideButton: any;
+  private compound: any;
+  private pHlabel: any;
+  private pH: any;
+  private compoundLabel: any;
 
   constructor() {
     super({ key: 'MainScene' });
@@ -22,151 +23,174 @@ export default class MainScene extends Phaser.Scene {
 
 
   create() {
-    this.playerspeed=200;
-    this.background=this.add.tileSprite(0,0, this.scale.width*4, this.scale.height*4, "background");
-   
-    this.player=this.physics.add.image(this.scale.width/2, this.scale.height-64, "dog");
-    this.player.setScale(.1);
-    this.cursorKeys=this.input.keyboard.createCursorKeys();
-    
-    this.tennisball=this.physics.add.image(40, 90, "tennisball");
-    this.tennisball.setScale(.08).setVelocity(150,170).setCollideWorldBounds(true).setBounce(1);
+    this.add.text(5, 10, "Experiment 20: pH and its Applications", {fill: "#000000", fontSize: '16px'});
+    this.add.text(5, 40, "Select a \ncompound:", {fill: "#0000ff", fontSize: "12px"});
+    this.box=this.add.image(75,360,"bluebackground");
+    this.box.rotation+=0.00;
+    this.box.setScale(0.1);
+
+    this.unknown1button= this.add.text(5, 75, "20-39X", {fill: "#0f0"})
+     .setInteractive()
+     .on('pointerdown', ()=>this.updateCompound("unknown 1"))
+     .on('pointerover', ()=>this.enterButton1HoverState())
+     .on('pointerout', ()=>this.enterButton1RestState());
+
   
-    this.bee=this.physics.add.image(0, 40, "bee");
-    this.bee.setScale(0.06);
-    this.resetBeePos(this.bee);
+    this.unknown2button=this.add.text(5, 105, "20-40X", {fill: "#0f0"})
+     .setInteractive()
+     .on('pointerdown', ()=>this.updateCompound("unknown 2"))
+     .on('pointerover', ()=>this.enterButton2HoverState())
+     .on('pointerout', ()=>this.enterButton2RestState());
 
-    this.chocolate=this.physics.add.image(0, 60, "chocolate");
-    this.chocolate.setScale(0.08);
-    this.resetChocPos(this.chocolate);
+    this.unknown3button=this.add.text(5, 135, "20-77X", {fill: "#0f0"})
+     .setInteractive()
+     .on('pointerdown', ()=>this.updateCompound("unknown 3"))
+     .on('pointerover', ()=>this.enterButton3HoverState())
+     .on('pointerout', ()=>this.enterButton3RestState());
+    
+    this.unknown4button=this.add.text(5, 165, "20-87X", {fill: "#0f0"})
+     .setInteractive()
+     .on('pointerdown', ()=>this.updateCompound("unknown 4"))
+     .on('pointerover', ()=>this.enterButton4HoverState())
+     .on('pointerout', ()=>this.enterButton4RestState());
+    
+    this.ammoniumNitrateButton=this.add.text(5, 195, "NH4NO3", {fill: "#0f0"})
+     .setInteractive()
+     .on('pointerdown', ()=>this.updateCompound("ammonium nitrate"))
+     .on('pointerover', ()=>this.enterButton5HoverState())
+     .on('pointerout', ()=>this.enterButton5RestState());
 
-    this.bone=this.physics.add.image(0, 0, "bone");
-    this.bone.setScale(0.08);
-    this.resetBonePos(this.bone);
+    this.sodiumAcetateButton=this.add.text(5, 225, "NaC2H3O2", {fill: "#0f0"})
+     .setInteractive()
+     .on('pointerdown', ()=>this.updateCompound("sodium acetate"))
+     .on('pointerover', ()=>this.enterButton6HoverState())
+     .on('pointerout', ()=>this.enterButton6RestState());
 
-    this.bark=this.sound.add("bark");
-    this.music=this.sound.add("music");
+    this.sodiumChlorideButton=this.add.text(5, 255, "NaCl", {fill: "#0f0"})
+     .setInteractive()
+     .on('pointerdown', ()=>this.updateCompound("sodium chloride"))
+     .on('pointerover', ()=>this.enterButton7HoverState())
+     .on('pointerout', ()=>this.enterButton7RestState());
 
-    let musicConfig = {
-      mute: false,
-      volume: 1,
-      rate: 1,
-      detune: 1,
-      seek: 1,
-      loop: false,
-      delay: 0
-    }
+    this.pHlabel=this.add.bitmapText(30, 350, "pixelFont", "pH: ", 40);
+    this.pH="-.--"
+    this.pHlabel.text="pH: "+ this.pH;
 
-    this.music.play(musicConfig);
-    this.scoreLabel=this.add.bitmapText(10,5,"pixelFont", "SCORE", 16);
-    this.score=0;
-    this.scoreLabel.text="SCORE: "+ this.score;
+    this.compound="N/A";
 
-    this.physics.add.overlap(this.player, this.bee, this.beesHurt, undefined, this);
-    this.physics.add.overlap(this.player, this.chocolate, this.chocolateBad, undefined, this);
-    this.physics.add.overlap(this.player, this.bone, this.boneGood, undefined, this);
-    this.physics.add.overlap(this.player, this.tennisball, this.fetched, undefined, this);
+    this.compoundLabel=this.add.bitmapText(5, 300, "pixelFont");
+    this.compoundLabel.fontSize=20;
+    this.compoundLabel.text=this.compound + " has \nbeen selected";
+   
+    //this.player=this.physics.add.image(this.scale.width/2, this.scale.height-64, "dog");
+    //this.player.setScale(.1);
+    //this.cursorKeys=this.input.keyboard.createCursorKeys();
+  
+    //this.scoreLabel=this.add.bitmapText(10,5,"pixelFont", "SCORE", 16);
+    //this.score=0;
+    //this.scoreLabel.text="SCORE: "+ this.score;
+
+    //this.physics.add.overlap(this.phmeter, this.liquid, this.calculateph, undefined, this);
   } 
 
   update() {
-    this.background.tilePositionY-=0.5;
-    this.movePlayerManager();
-    this.moveBee(this.bee, 3);
-    this.moveChoc(this.chocolate, 4);
-    this.moveBone(this.bone, 3);
+    this.pHlabel.text="pH: "+this.pH;
+    this.displaySelected();
   }
 
-  moveBee(bee, speed){
-    bee.y+=speed;
-    if (bee.y>this.scale.height){
-      this.resetBeePos(bee);
+  displaySelected(){
+    if (this.compound !== "N/A"){
+      this.compoundLabel.setText(this.compound + " has \nbeen selected");
+      //this.add.text(5, 280, this.compound + "has been selected", {fill: "#000000", fontSize: "10"});
     }
   }
 
-  moveChoc(chocolate, speed){
-    chocolate.y+=speed;
-    if (chocolate.y>this.scale.height){
-      this.resetChocPos(chocolate);
+  updateCompound(name){
+    this.compound=name;
+    this.updatepH();
+  }
+
+  updatepH(){
+    if (this.compound==="unknown 1"){
+      this.pH="1.92";
+    }
+    if (this.compound==="null"){
+      this.pH="-.--";
     }
   }
 
-  moveBone(bone, speed){
-    bone.x+=speed;
-    if (bone.x>this.scale.width){
-      this.resetBonePos(bone);
-    }
+  enterButton1HoverState(){
+    this.unknown1button.setStyle({fill: '#ff0'});
   }
 
-  resetBeePos(bee){
-    bee.y=0;
-    let randomX=Phaser.Math.Between(0, this.scale.width);
-    bee.x=randomX;
+  enterButton1RestState(){
+    this.unknown1button.setStyle({fill: '#0f0'});
   }
 
-  resetChocPos(chocolate){
-    chocolate.y=0;
-    let randomX=Phaser.Math.Between(0, this.scale.height);
-    chocolate.x=randomX;
+  enterButton2HoverState(){
+    this.unknown2button.setStyle({fill: '#ff0'});
   }
 
-  resetBonePos(bone){
-    bone.x=0;
-    bone.y=Phaser.Math.Between(0, this.scale.width);
+  enterButton2RestState(){
+    this.unknown2button.setStyle({fill: '#0f0'});
   }
 
-  resetTennisballPos(tennisball){
-    tennisball.x=Phaser.Math.Between(0, this.scale.width);
-    tennisball.y=Phaser.Math.Between(0, this.scale.height);
+  enterButton3HoverState(){
+    this.unknown3button.setStyle({fill: '#ff0'});
   }
 
-  beesHurt(player, bee){
-    this.score-=20;
-    if (this.playerspeed>20){
-      this.playerspeed-=20;
-    }
-    this.resetBeePos(bee);
-    this.scoreLabel.text="SCORE: "+ this.score;
+  enterButton3RestState(){
+    this.unknown3button.setStyle({fill: '#0f0'});
   }
 
-  chocolateBad(player, chocolate){
-    this.score-=30;
-    if (this.playerspeed>30){
-      this.playerspeed-=30;
-    }
-    this.resetChocPos(chocolate);
-    this.scoreLabel.text="SCORE: "+ this.score;
+  enterButton4HoverState(){
+    this.unknown4button.setStyle({fill: '#ff0'});
   }
 
-  boneGood(player, bone){
-    this.score+=30;
-    if (this.playerspeed<250){
-      this.playerspeed+=30;
-    }
-    this.resetBonePos(bone);
-    this.scoreLabel.text="SCORE: "+ this.score;
+  enterButton4RestState(){
+    this.unknown4button.setStyle({fill: '#0f0'});
   }
 
-  fetched(player, tennisball){
-    this.bark.play();
-    this.score+=100;
-    this.resetTennisballPos(tennisball);
-    this.scoreLabel.text="SCORE: "+ this.score;
+  enterButton5HoverState(){
+    this.ammoniumNitrateButton.setStyle({fill: '#ff0'});
   }
 
+  enterButton5RestState(){
+    this.ammoniumNitrateButton.setStyle({fill: '#0f0'});
+  }
+
+  enterButton6HoverState(){
+    this.sodiumAcetateButton.setStyle({fill: '#ff0'});
+  }
+
+  enterButton6RestState(){
+    this.sodiumAcetateButton.setStyle({fill: '#0f0'});
+  }
+
+  enterButton7HoverState(){
+    this.sodiumChlorideButton.setStyle({fill: '#ff0'});
+  }
+
+  enterButton7RestState(){
+    this.sodiumChlorideButton.setStyle({fill: '#0f0'});
+  }
+
+  /*
   movePlayerManager(){
     if (this.cursorKeys.left.isDown){
-      this.player.setVelocityX(-this.playerspeed);
+      //this.player.setVelocityX(-this.playerspeed);
     } else if (this.cursorKeys.right.isDown){
-      this.player.setVelocityX(this.playerspeed);
+      //this.player.setVelocityX(this.playerspeed);
     } else {
-      this.player.setVelocityX(0);
+      //this.player.setVelocityX(0);
     }
     if (this.cursorKeys.down.isDown){
-      this.player.setVelocityY(this.playerspeed);
+      //this.player.setVelocityY(this.playerspeed);
     } else if (this.cursorKeys.up.isDown){
-      this.player.setVelocityY(-this.playerspeed);
+      //this.player.setVelocityY(-this.playerspeed);
     } else {
-      this.player.setVelocityY(0);
+      //this.player.setVelocityY(0);
     }
   }
+  */
 }

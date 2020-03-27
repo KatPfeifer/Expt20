@@ -4,16 +4,10 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('background', "assets/images/background.png");
-    this.load.image("dog", "assets/images/dog.png");
-    this.load.image('tennisball', "assets/images/tennisball.png");
-    this.load.image('bee', "assets/images/bee.png");
-    this.load.image('chocolate', "assets/images/chocolate.png");
-    this.load.image('bone', "assets/images/bone.png");
+    this.load.image('bluebackground', "assets/images/bluebackground.jpg");
+    this.load.image('unknown1button', "assets/images/background.png");
     this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
-    this.load.audio('bark', "assets/audio/bark.mp3");
-    this.load.audio('music', "assets/audio/music.mp3");
-  
+    this.load.bitmapFont("font1", "assets/font/font1.fnt");
   }
 
   create() {
