@@ -88,26 +88,26 @@ export default class MainScene extends Phaser.Scene {
      .on('pointerdown', ()=>this.addBase());
     this.baseButton.setScale(0.8);
 
-    this.unknown1button= this.add.text(5, 75, "20-39X", {fill: "#0f0"})
+    this.unknown1button= this.add.text(5, 75, "20-392", {fill: "#0f0"})
      .setInteractive()
      .on('pointerdown', ()=>this.updateCompound("unknown 1"))
      .on('pointerover', ()=>this.enterButton1HoverState())
      .on('pointerout', ()=>this.enterButton1RestState());
 
   
-    this.unknown2button=this.add.text(5, 100, "20-40X", {fill: "#0f0"})
+    this.unknown2button=this.add.text(5, 100, "20-406", {fill: "#0f0"})
      .setInteractive()
      .on('pointerdown', ()=>this.updateCompound("unknown 2"))
      .on('pointerover', ()=>this.enterButton2HoverState())
      .on('pointerout', ()=>this.enterButton2RestState());
 
-    this.unknown3button=this.add.text(5, 125, "20-77X", {fill: "#0f0"})
+    this.unknown3button=this.add.text(5, 125, "20-770", {fill: "#0f0"})
      .setInteractive()
      .on('pointerdown', ()=>this.updateCompound("unknown 3"))
      .on('pointerover', ()=>this.enterButton3HoverState())
      .on('pointerout', ()=>this.enterButton3RestState());
     
-    this.unknown4button=this.add.text(5, 150, "20-87X", {fill: "#0f0"})
+    this.unknown4button=this.add.text(5, 150, "20-879", {fill: "#0f0"})
      .setInteractive()
      .on('pointerdown', ()=>this.updateCompound("unknown 4"))
      .on('pointerover', ()=>this.enterButton4HoverState())
@@ -160,6 +160,7 @@ export default class MainScene extends Phaser.Scene {
   addAcid(){
     this.hydroxides.setAlpha(0.0);
     this.acidAdded=true;
+    this.baseAdded=false;
     this.protons.setAlpha(1.0);
     this.notUpdated=true;
   }
@@ -167,6 +168,7 @@ export default class MainScene extends Phaser.Scene {
   addBase(){
     this.protons.setAlpha(0.0);
     this.baseAdded=true;
+    this.acidAdded=false;
     this.hydroxides.setAlpha(1.0);
     this.notUpdated=true;
   }
@@ -210,19 +212,51 @@ export default class MainScene extends Phaser.Scene {
   updatepH(){
     var x = (Math.random()-0.5)/Math.pow(10,1);
     if (this.compound==="unknown 1"&&this.notUpdated){
-      this.pH=(1.92+x).toString().substring(0,4);
+      if (this.acidAdded){
+        this.pH=(1.92+x-0.3).toString().substring(0,4);
+      }
+      if (this.baseAdded){
+        this.pH=(1.92+x+0.3).toString().substring(0,4);
+      }
+      if ((!this.acidAdded)&&(!this.baseAdded)){
+        this.pH=(1.92+x).toString().substring(0,4);
+      }
       this.notUpdated=false;
     }
     if (this.compound==="unknown 2"&& this.notUpdated){
-      this.pH=(4.1+x).toString().substring(0,4);
+      if (this.acidAdded){
+        this.pH=(4.1+x-0.3).toString().substring(0,4);
+      }
+      if (this.baseAdded){
+        this.pH=(4.1+x+0.3).toString().substring(0,4);
+      }
+      if ((!this.acidAdded)&&(this.baseAdded)){
+        this.pH=(4.1+x).toString().substring(0,4);
+      }
       this.notUpdated=false;
     }
     if (this.compound==="unknown 3"&&this.notUpdated){
-      this.pH=(5.51+x).toString().substring(0,4);
+      if (this.acidAdded){
+        this.pH=(5.51+x-0.3).toString().substring(0,4);  
+      }
+      if (this.baseAdded){
+        this.pH=(5.51+x+0.3).toString().substring(0,4);
+      }
+      if ((!this.acidAdded)&&(!this.baseAdded)){
+        this.pH=(5.51+x).toString().substring(0,4);
+      }
       this.notUpdated=false;
     }
     if (this.compound==="unknown 4"&&this.notUpdated){
-      this.pH=(6.91+x).toString().substring(0,4);
+      if (this.acidAdded){
+        this.pH=(6.91+x-0.3).toString().substring(0,4);
+      }
+      if (this.baseAdded){
+        this.pH=(6.91+x+0.3).toString().substring(0,4);
+      }
+      if ((!this.acidAdded)&&(!this.baseAdded)){
+        this.pH=(6.91+x).toString().substring(0,4);
+      }
       this.notUpdated=false;
     }
     if (this.compound==="ammonium nitrate"&&this.notUpdated){
