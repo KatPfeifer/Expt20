@@ -230,7 +230,7 @@ export default class MainScene extends Phaser.Scene {
       if (this.baseAdded){
         this.pH=(4.1+x+0.3).toString().substring(0,4);
       }
-      if ((!this.acidAdded)&&(this.baseAdded)){
+      if ((!this.acidAdded)&&(!this.baseAdded)){
         this.pH=(4.1+x).toString().substring(0,4);
       }
       this.notUpdated=false;
@@ -260,18 +260,30 @@ export default class MainScene extends Phaser.Scene {
       this.notUpdated=false;
     }
     if (this.compound==="ammonium nitrate"&&this.notUpdated){
-      this.pH=(5.15+x).toString().substring(0,4);
+      if (this.acidAdded){
+        this.pH=(3+x).toString().substring(0,4);
+      }
+      if (this.baseAdded){
+        this.pH=(9.3+x).toString().substring(0,4);
+      }
+      if ((!this.acidAdded)&&(!this.baseAdded)){
+        this.pH=(5.15+x).toString().substring(0,4);
+      }
       this.notUpdated=false;
     }
     if (this.compound==="sodium acetate"&&this.notUpdated){
-      this.pH=(8.87+x).toString().substring(0,4);
+      if (this.acidAdded){
+        this.pH=(4.75+x).toString().substring(0,4);
+      }
+      if (this.baseAdded){
+        this.pH=(11+x).toString().substring(0,4);
+      }
+      if ((!this.acidAdded)&&(!this.baseAdded)){
+        this.pH=(8.87+x).toString().substring(0,4);
+      }
       this.notUpdated=false;
     }
-    if (this.compound==="sodium chloride"&&this.notUpdated){
-      this.pH=(7+x).toString().substring(0,4);
-      this.notUpdated=false;
-    }
-    if (this.compound==="water"&&this.notUpdated){
+    if ((this.compound==="water"&&this.notUpdated)||(this.compound==="sodium chloride"&&this.notUpdated)){
       if (this.acidAdded){
         this.pH=(3+x).toString().substring(0,4);
       }
