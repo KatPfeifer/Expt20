@@ -3,15 +3,8 @@ import CompoundButton from '../objects/compoundButton';
 
 export default class MainScene extends Phaser.Scene {
   private background: any;
+  private compoundButtons: CompoundButton[];
   private box: any;
-  private unknown1button: any;
-  private unknown2button: any;
-  private unknown3button: any;
-  private unknown4button: any;
-  private ammoniumNitrateButton: any;
-  private sodiumAcetateButton: any;
-  private sodiumChlorideButton: any;
-  private waterButton: any;
   private compound: any;
   private pHlabel: any;
   private pH: any;
@@ -87,14 +80,16 @@ export default class MainScene extends Phaser.Scene {
      .on('pointerdown', ()=>this.addBase());
     this.baseButton.setScale(0.8);
 
-    this.unknown1button = new CompoundButton(this, 5, 75, "20-392", "unknown 1");  
-    this.unknown2button = new CompoundButton(this, 5, 100, "20-406", "unknown 2");
-    this.unknown3button = new CompoundButton(this, 5, 125, "20-770", "unknown 3");
-    this.unknown4button = new CompoundButton(this, 5, 150, "20-879", "unknown 4");
-    this.ammoniumNitrateButton=new CompoundButton(this, 5, 175, "NH4NO3", "ammonium nitrate");
-    this.sodiumAcetateButton=new CompoundButton(this, 5, 200, "NaC2H3O2", "sodium acetate");
-    this.sodiumChlorideButton=new CompoundButton(this, 5, 225, "NaCl", "sodium chloride");
-    this.waterButton=new CompoundButton(this, 5, 250, "H2O", "water");
+    this.compoundButtons = [
+      new CompoundButton(this, 5, 75, "20-392", "unknown 1"),
+      new CompoundButton(this, 5, 100, "20-406", "unknown 2"),
+      new CompoundButton(this, 5, 125, "20-770", "unknown 3"),
+      new CompoundButton(this, 5, 150, "20-879", "unknown 4"),
+      new CompoundButton(this, 5, 175, "NH4NO3", "ammonium nitrate"),
+      new CompoundButton(this, 5, 200, "NaC2H3O2", "sodium acetate"),
+      new CompoundButton(this, 5, 225, "NaCl", "sodium chloride"),
+      new CompoundButton(this, 5, 250, "H2O", "water")
+    ];
 
     this.pHlabel=this.add.bitmapText(30, 350, "pixelFont", "pH: ", 40);
     this.pH="-.--"
