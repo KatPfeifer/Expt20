@@ -47,22 +47,36 @@ export default class MainScene extends Phaser.Scene {
     this.notUpdated=true;
     this.adding = AcidBaseNeutral.Neutral;
 
-    this.add.text(5, 10, "Experiment 20: pH and its Applications", {fill: "#000000", fontSize: '16px'});
-    this.add.text(5, 40, "Select a \ncompound:", {fill: "#0000ff", fontSize: "12px"});
-    this.box=this.add.image(75,360,"bluebackground");
-    this.box.rotation+=0.00;
-    this.box.setScale(0.1);
-
-    this.otherbox=this.physics.add.image(300, 360, "bluebackground");
-    this.otherbox.setScale(0.05);
-    this.otherbox.setAlpha(0.0);
-
-    this.pHmeter=this.physics.add.image(300, 100, "pHmeter");
+    this.pHmeter=this.physics.add.image(300, 150, "pHmeter");
     this.pHmeter.setScale(0.8);
     this.pHmeter.setInteractive();
     this.input.setDraggable(this.pHmeter);
-
     this.input.on('drag', this.doDrag, this)
+
+    this.createExplanations();
+    this.createDecorativeImages();
+    this.createButtons();
+    this.createCompoundStuff();
+    
+
+    this.pHlabel=this.add.bitmapText(30, 350, "pixelFont", "pH: ", 40);
+    this.pH="-.--";
+    this.pHlabel.text="pH: "+ this.pH;
+
+    this.physics.add.overlap(this.otherbox, this.pHmeter, this.updatepH, undefined, this);
+  } 
+
+  createExplanations() {
+    this.add.text(5, 10, "Experiment 20: pH and its Applications", {fill: "#000000", fontSize: '16px'});
+    this.add.text(5, 40, "Select a \ncompound:", {fill: "#0000ff", fontSize: "12px"});
+    this.box=this.add.image(75,360,"bluebackground");
+    this.box.setScale(0.1);
+  }
+
+  createDecorativeImages() {
+    this.otherbox=this.physics.add.image(300, 360, "bluebackground");
+    this.otherbox.setScale(0.05);
+    this.otherbox.setAlpha(0.0);
 
     this.beakerimage=this.add.image(300, 300, "emptybeaker");
     this.beakerimage.setScale(0.4);
@@ -79,22 +93,27 @@ export default class MainScene extends Phaser.Scene {
     this.hydroxides=this.add.image(300,350, "hydroxides");
     this.hydroxides.setScale(0.5);
     this.hydroxides.setAlpha(0);
-    
+  }
+
+  createButtons() {
     this.resetButton=this.add.image(140, 60, "resetbutton")
-     .setInteractive()
-     .on('pointerdown', ()=>this.reset());
+      .setInteractive()
+      .on('pointerdown', ()=>this.reset());
     this.resetButton.setScale(0.8);
 
     this.acidButton=this.add.image(140, 120, "acidButton")
-     .setInteractive()
-     .on('pointerdown', ()=>this.addAcid());
+      .setInteractive()
+      .on('pointerdown', ()=>this.addAcid());
     this.acidButton.setScale(0.8);
 
     this.baseButton=this.add.image(140, 180, "baseButton")
-     .setInteractive()
-     .on('pointerdown', ()=>this.addBase());
+      .setInteractive()
+      .on('pointerdown', ()=>this.addBase());
     this.baseButton.setScale(0.8);
 
+  }
+
+  createCompoundStuff() {
     this.compoundButtons = [
       new CompoundButton(this, 5, 75, "20-392", "unknown 1"),
       new CompoundButton(this, 5, 100, "20-406", "unknown 2"),
@@ -106,20 +125,11 @@ export default class MainScene extends Phaser.Scene {
       new CompoundButton(this, 5, 250, "H2O", "water")
     ];
 
-    this.pHlabel=this.add.bitmapText(30, 350, "pixelFont", "pH: ", 40);
-    this.pH="-.--"
-    this.pHlabel.text="pH: "+ this.pH;
-
     this.compound="N/A";
-
     this.compoundLabel=this.add.bitmapText(5, 300, "pixelFont");
     this.compoundLabel.fontSize=20;
-    this.compoundLabel.text=this.compound + " has \nbeen selected";
-
-  
-
-    this.physics.add.overlap(this.otherbox, this.pHmeter, this.updatepH, undefined, this);
-  } 
+    this.compoundLabel.text=this.compound + " has \nbeen selected";  
+  }
 
   update() {
     this.pHlabel.text="pH: "+this.pH;
