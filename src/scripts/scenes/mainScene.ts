@@ -1,6 +1,5 @@
 import ExampleObject from '../objects/exampleObject';
-import { GameObjects } from 'phaser';
-import { Beam } from '../objects/Beam';
+import CompoundButton from '../objects/compoundButton';
 
 export default class MainScene extends Phaser.Scene {
   private background: any;
@@ -88,54 +87,14 @@ export default class MainScene extends Phaser.Scene {
      .on('pointerdown', ()=>this.addBase());
     this.baseButton.setScale(0.8);
 
-    this.unknown1button= this.add.text(5, 75, "20-392", {fill: "#0f0"})
-     .setInteractive()
-     .on('pointerdown', ()=>this.updateCompound("unknown 1"))
-     .on('pointerover', ()=>this.enterButton1HoverState())
-     .on('pointerout', ()=>this.enterButton1RestState());
-
-  
-    this.unknown2button=this.add.text(5, 100, "20-406", {fill: "#0f0"})
-     .setInteractive()
-     .on('pointerdown', ()=>this.updateCompound("unknown 2"))
-     .on('pointerover', ()=>this.enterButton2HoverState())
-     .on('pointerout', ()=>this.enterButton2RestState());
-
-    this.unknown3button=this.add.text(5, 125, "20-770", {fill: "#0f0"})
-     .setInteractive()
-     .on('pointerdown', ()=>this.updateCompound("unknown 3"))
-     .on('pointerover', ()=>this.enterButton3HoverState())
-     .on('pointerout', ()=>this.enterButton3RestState());
-    
-    this.unknown4button=this.add.text(5, 150, "20-879", {fill: "#0f0"})
-     .setInteractive()
-     .on('pointerdown', ()=>this.updateCompound("unknown 4"))
-     .on('pointerover', ()=>this.enterButton4HoverState())
-     .on('pointerout', ()=>this.enterButton4RestState());
-    
-    this.ammoniumNitrateButton=this.add.text(5, 175, "NH4NO3", {fill: "#0f0"})
-     .setInteractive()
-     .on('pointerdown', ()=>this.updateCompound("ammonium nitrate"))
-     .on('pointerover', ()=>this.enterButton5HoverState())
-     .on('pointerout', ()=>this.enterButton5RestState());
-
-    this.sodiumAcetateButton=this.add.text(5, 200, "NaC2H3O2", {fill: "#0f0"})
-     .setInteractive()
-     .on('pointerdown', ()=>this.updateCompound("sodium acetate"))
-     .on('pointerover', ()=>this.enterButton6HoverState())
-     .on('pointerout', ()=>this.enterButton6RestState());
-
-    this.sodiumChlorideButton=this.add.text(5, 225, "NaCl", {fill: "#0f0"})
-     .setInteractive()
-     .on('pointerdown', ()=>this.updateCompound("sodium chloride"))
-     .on('pointerover', ()=>this.enterButton7HoverState())
-     .on('pointerout', ()=>this.enterButton7RestState());
-
-    this.waterButton=this.add.text(5, 250, "H2O", {fill: "#0f0"})
-     .setInteractive()
-     .on('pointerdown', ()=>this.updateCompound("water"))
-     .on('pointerover', ()=>this.enterButton8HoverState())
-     .on('pointerout', ()=>this.enterButton8RestState());
+    this.unknown1button = new CompoundButton(this, 5, 75, "20-392", "unknown 1");  
+    this.unknown2button = new CompoundButton(this, 5, 100, "20-406", "unknown 2");
+    this.unknown3button = new CompoundButton(this, 5, 125, "20-770", "unknown 3");
+    this.unknown4button = new CompoundButton(this, 5, 150, "20-879", "unknown 4");
+    this.ammoniumNitrateButton=new CompoundButton(this, 5, 175, "NH4NO3", "ammonium nitrate");
+    this.sodiumAcetateButton=new CompoundButton(this, 5, 200, "NaC2H3O2", "sodium acetate");
+    this.sodiumChlorideButton=new CompoundButton(this, 5, 225, "NaCl", "sodium chloride");
+    this.waterButton=new CompoundButton(this, 5, 250, "H2O", "water");
 
     this.pHlabel=this.add.bitmapText(30, 350, "pixelFont", "pH: ", 40);
     this.pH="-.--"
@@ -298,69 +257,5 @@ export default class MainScene extends Phaser.Scene {
     if (this.compound==="N/A"){
       this.pH="-.--";
     }
-  }
-
-  enterButton1HoverState(){
-    this.unknown1button.setStyle({fill: '#ff0'});
-  }
-
-  enterButton1RestState(){
-    this.unknown1button.setStyle({fill: '#0f0'});
-  }
-
-  enterButton2HoverState(){
-    this.unknown2button.setStyle({fill: '#ff0'});
-  }
-
-  enterButton2RestState(){
-    this.unknown2button.setStyle({fill: '#0f0'});
-  }
-
-  enterButton3HoverState(){
-    this.unknown3button.setStyle({fill: '#ff0'});
-  }
-
-  enterButton3RestState(){
-    this.unknown3button.setStyle({fill: '#0f0'});
-  }
-
-  enterButton4HoverState(){
-    this.unknown4button.setStyle({fill: '#ff0'});
-  }
-
-  enterButton4RestState(){
-    this.unknown4button.setStyle({fill: '#0f0'});
-  }
-
-  enterButton5HoverState(){
-    this.ammoniumNitrateButton.setStyle({fill: '#ff0'});
-  }
-
-  enterButton5RestState(){
-    this.ammoniumNitrateButton.setStyle({fill: '#0f0'});
-  }
-
-  enterButton6HoverState(){
-    this.sodiumAcetateButton.setStyle({fill: '#ff0'});
-  }
-
-  enterButton6RestState(){
-    this.sodiumAcetateButton.setStyle({fill: '#0f0'});
-  }
-
-  enterButton7HoverState(){
-    this.sodiumChlorideButton.setStyle({fill: '#ff0'});
-  }
-
-  enterButton7RestState(){
-    this.sodiumChlorideButton.setStyle({fill: '#0f0'});
-  }
-
-  enterButton8HoverState(){
-    this.waterButton.setStyle({fill: '#ff0'});
-  }
-
-  enterButton8RestState(){
-    this.waterButton.setStyle({fill: '#0f0'});
   }
 }
