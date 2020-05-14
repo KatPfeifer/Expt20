@@ -20,7 +20,6 @@ const COMPOUND_PH_CONSTANT = {
 
 export default class MainScene extends Phaser.Scene {
   private background: any;
-  private compoundButtons: CompoundButton[];
   private box: any;
   private compound: any;
   private pHlabel: any;
@@ -31,9 +30,6 @@ export default class MainScene extends Phaser.Scene {
   private filledbeaker: any;
   private pHmeter: any;
   private notUpdated: boolean;
-  private resetButton: any;
-  private acidButton: any;
-  private baseButton: any;
   adding: AcidBaseNeutral;
   private protons: any;
   private hydroxides: any;
@@ -80,7 +76,6 @@ export default class MainScene extends Phaser.Scene {
 
     this.beakerimage=this.add.image(300, 300, "emptybeaker");
     this.beakerimage.setScale(0.4);
-    this.beakerimage.setAlpha(1);
 
     this.filledbeaker=this.add.image(300, 300, "filledbeaker");
     this.filledbeaker.setScale(0.4);
@@ -96,34 +91,27 @@ export default class MainScene extends Phaser.Scene {
   }
 
   createButtons() {
-    this.resetButton=this.add.image(140, 60, "resetbutton")
-      .setInteractive()
-      .on('pointerdown', ()=>this.reset());
-    this.resetButton.setScale(0.8);
+    const yPositions = [60, 120, 180];
+    const textures = ["resetbutton", "acidButton", "baseButton"];
+    const callbacks = [this.reset, this.addAcid, this.addBase];
 
-    this.acidButton=this.add.image(140, 120, "acidButton")
-      .setInteractive()
-      .on('pointerdown', ()=>this.addAcid());
-    this.acidButton.setScale(0.8);
-
-    this.baseButton=this.add.image(140, 180, "baseButton")
-      .setInteractive()
-      .on('pointerdown', ()=>this.addBase());
-    this.baseButton.setScale(0.8);
-
+    for (let i=0; i< yPositions.length; i+=1) {
+      this.add.image(140, yPositions[i], textures[i])
+        .setInteractive()
+        .on('pointerdown', callbacks[i], this)
+        .setScale(.8);
+    }
   }
 
   createCompoundStuff() {
-    this.compoundButtons = [
-      new CompoundButton(this, 5, 75, "20-392", "unknown 1"),
-      new CompoundButton(this, 5, 100, "20-406", "unknown 2"),
-      new CompoundButton(this, 5, 125, "20-770", "unknown 3"),
-      new CompoundButton(this, 5, 150, "20-879", "unknown 4"),
-      new CompoundButton(this, 5, 175, "NH4NO3", "ammonium nitrate"),
-      new CompoundButton(this, 5, 200, "NaC2H3O2", "sodium acetate"),
-      new CompoundButton(this, 5, 225, "NaCl", "sodium chloride"),
-      new CompoundButton(this, 5, 250, "H2O", "water")
-    ];
+    new CompoundButton(this, 5, 75, "20-392", "unknown 1"),
+    new CompoundButton(this, 5, 100, "20-406", "unknown 2"),
+    new CompoundButton(this, 5, 125, "20-770", "unknown 3"),
+    new CompoundButton(this, 5, 150, "20-879", "unknown 4"),
+    new CompoundButton(this, 5, 175, "NH4NO3", "ammonium nitrate"),
+    new CompoundButton(this, 5, 200, "NaC2H3O2", "sodium acetate"),
+    new CompoundButton(this, 5, 225, "NaCl", "sodium chloride"),
+    new CompoundButton(this, 5, 250, "H2O", "water")
 
     this.compound="N/A";
     this.compoundLabel=this.add.bitmapText(5, 300, "pixelFont");
