@@ -1,6 +1,7 @@
 import ExampleObject from '../objects/exampleObject';
 import CompoundButton from '../objects/compoundButton';
 import { PHConstant } from '../objects/phConstant';
+import { PHMeter } from '../objects/phMeter';
 
 enum AcidBaseNeutral {
   Acid = "acid",
@@ -22,13 +23,11 @@ export default class MainScene extends Phaser.Scene {
   private background: any;
   private box: any;
   private compound: any;
-  private pHlabel: any;
-  private pH: any;
   private compoundLabel: any;
   private beakerimage: any;
   private otherbox: any;
   private filledbeaker: any;
-  private pHmeter: any;
+  private pHmeter: PHMeter;
   private notUpdated: boolean;
   adding: AcidBaseNeutral;
   private protons: any;
@@ -43,21 +42,12 @@ export default class MainScene extends Phaser.Scene {
     this.notUpdated=true;
     this.adding = AcidBaseNeutral.Neutral;
 
-    this.pHmeter=this.physics.add.image(300, 150, "pHmeter");
-    this.pHmeter.setScale(0.8);
-    this.pHmeter.setInteractive();
-    this.input.setDraggable(this.pHmeter);
-    this.input.on('drag', this.doDrag, this)
-
     this.createExplanations();
     this.createDecorativeImages();
     this.createButtons();
     this.createCompoundStuff();
-    
 
-    this.pHlabel=this.add.bitmapText(30, 350, "pixelFont", "pH: ", 40);
-    this.pH="-.--";
-    this.pHlabel.text="pH: "+ this.pH;
+    this.pHmeter = new PHMeter(this, 300, 150);
 
     this.physics.add.overlap(this.otherbox, this.pHmeter, this.updatepH, undefined, this);
   } 
@@ -120,7 +110,6 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update() {
-    this.pHlabel.text="pH: "+this.pH;
     this.displaySelected();
   }
 
@@ -158,25 +147,18 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
-  doDrag(pointer){
-    this.pHmeter.x=pointer.x;
-    this.pHmeter.y=pointer.y;
-  }
-
   updateCompound(name){
     this.compound=name;
     this.adding = AcidBaseNeutral.Neutral;
     this.protons.setAlpha(0.0);
     this.hydroxides.setAlpha(0.0);
     this.notUpdated=true;
-    this.pH="-.--";
+    this.pHmeter.resetPH();
   }
-
-  
 
   updatepH(){
     if (this.compound==="N/A"){
-      this.pH="-.--";
+      this.pHmeter.resetPH();
       return;
     }
     if (!this.notUpdated) {
@@ -185,7 +167,7 @@ export default class MainScene extends Phaser.Scene {
     let x = (Math.random()-0.5)/Math.pow(10,1);
     let phConstant = COMPOUND_PH_CONSTANT[this.compound][this.adding];
     let pH = (x+phConstant);
-    this.pH = pH.toString().substring(0, 4);
+    this.pHmeter.updatePH(pH);
     this.notUpdated=false;
   }
 }
