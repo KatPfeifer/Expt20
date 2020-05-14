@@ -1,5 +1,22 @@
 import ExampleObject from '../objects/exampleObject';
 import CompoundButton from '../objects/compoundButton';
+import { PHConstant } from '../objects/phConstant';
+
+enum AcidBaseNeutral {
+  Acid = "acid",
+  Base = "base",
+  Neutral = "neutral"
+}
+
+const COMPOUND_PH_CONSTANT = {
+  "unknown 1": new PHConstant(1.92-.3, 1.92+.3, 1.92),
+  "unknown 2": new PHConstant(4.1-.3, 4.1+.3, 4.1),
+  "unknown 3": new PHConstant(5.51-.3, 5.51+.3, 5.51),
+  "unknown 4": new PHConstant(6.91-.3, 6.91+.3, 6.91),
+  "ammonium nitrate": new PHConstant(3, 9.3, 5.15),
+  "sodium acetate": new PHConstant(4.75, 11, 8.87),
+  "water": new PHConstant(3, 11, 7),
+}
 
 export default class MainScene extends Phaser.Scene {
   private background: any;
@@ -17,8 +34,7 @@ export default class MainScene extends Phaser.Scene {
   private resetButton: any;
   private acidButton: any;
   private baseButton: any;
-  private acidAdded: any;
-  private baseAdded: any;
+  adding: AcidBaseNeutral;
   private protons: any;
   private hydroxides: any;
 
@@ -29,8 +45,7 @@ export default class MainScene extends Phaser.Scene {
 
   create() {
     this.notUpdated=true;
-    this.acidAdded=false;
-    this.baseAdded=false;
+    this.adding = AcidBaseNeutral.Neutral;
 
     this.add.text(5, 10, "Experiment 20: pH and its Applications", {fill: "#000000", fontSize: '16px'});
     this.add.text(5, 40, "Select a \ncompound:", {fill: "#0000ff", fontSize: "12px"});
@@ -113,16 +128,14 @@ export default class MainScene extends Phaser.Scene {
 
   addAcid(){
     this.hydroxides.setAlpha(0.0);
-    this.acidAdded=true;
-    this.baseAdded=false;
+    this.adding = AcidBaseNeutral.Acid;
     this.protons.setAlpha(1.0);
     this.notUpdated=true;
   }
 
   addBase(){
     this.protons.setAlpha(0.0);
-    this.baseAdded=true;
-    this.acidAdded=false;
+    this.adding = AcidBaseNeutral.Base;
     this.hydroxides.setAlpha(1.0);
     this.notUpdated=true;
   }
@@ -133,8 +146,7 @@ export default class MainScene extends Phaser.Scene {
     this.compound="N/A";
     this.notUpdated=true;
     this.updatepH();
-    this.acidAdded=false;
-    this.baseAdded=false;
+    this.adding = AcidBaseNeutral.Neutral;
     this.protons.setAlpha(0.0);
     this.hydroxides.setAlpha(0.0);
   }
@@ -155,102 +167,27 @@ export default class MainScene extends Phaser.Scene {
 
   updateCompound(name){
     this.compound=name;
-    this.acidAdded=false;
-    this.baseAdded=false;
+    this.adding = AcidBaseNeutral.Neutral;
     this.protons.setAlpha(0.0);
     this.hydroxides.setAlpha(0.0);
     this.notUpdated=true;
     this.pH="-.--";
   }
 
+  
+
   updatepH(){
-    var x = (Math.random()-0.5)/Math.pow(10,1);
-    if (this.compound==="unknown 1"&&this.notUpdated){
-      if (this.acidAdded){
-        this.pH=(1.92+x-0.3).toString().substring(0,4);
-      }
-      if (this.baseAdded){
-        this.pH=(1.92+x+0.3).toString().substring(0,4);
-      }
-      if ((!this.acidAdded)&&(!this.baseAdded)){
-        this.pH=(1.92+x).toString().substring(0,4);
-      }
-      this.notUpdated=false;
-    }
-    if (this.compound==="unknown 2"&& this.notUpdated){
-      if (this.acidAdded){
-        this.pH=(4.1+x-0.3).toString().substring(0,4);
-      }
-      if (this.baseAdded){
-        this.pH=(4.1+x+0.3).toString().substring(0,4);
-      }
-      if ((!this.acidAdded)&&(!this.baseAdded)){
-        this.pH=(4.1+x).toString().substring(0,4);
-      }
-      this.notUpdated=false;
-    }
-    if (this.compound==="unknown 3"&&this.notUpdated){
-      if (this.acidAdded){
-        this.pH=(5.51+x-0.3).toString().substring(0,4);  
-      }
-      if (this.baseAdded){
-        this.pH=(5.51+x+0.3).toString().substring(0,4);
-      }
-      if ((!this.acidAdded)&&(!this.baseAdded)){
-        this.pH=(5.51+x).toString().substring(0,4);
-      }
-      this.notUpdated=false;
-    }
-    if (this.compound==="unknown 4"&&this.notUpdated){
-      if (this.acidAdded){
-        this.pH=(6.91+x-0.3).toString().substring(0,4);
-      }
-      if (this.baseAdded){
-        this.pH=(6.91+x+0.3).toString().substring(0,4);
-      }
-      if ((!this.acidAdded)&&(!this.baseAdded)){
-        this.pH=(6.91+x).toString().substring(0,4);
-      }
-      this.notUpdated=false;
-    }
-    if (this.compound==="ammonium nitrate"&&this.notUpdated){
-      if (this.acidAdded){
-        this.pH=(3+x).toString().substring(0,4);
-      }
-      if (this.baseAdded){
-        this.pH=(9.3+x).toString().substring(0,4);
-      }
-      if ((!this.acidAdded)&&(!this.baseAdded)){
-        this.pH=(5.15+x).toString().substring(0,4);
-      }
-      this.notUpdated=false;
-    }
-    if (this.compound==="sodium acetate"&&this.notUpdated){
-      if (this.acidAdded){
-        this.pH=(4.75+x).toString().substring(0,4);
-      }
-      if (this.baseAdded){
-        this.pH=(11+x).toString().substring(0,4);
-      }
-      if ((!this.acidAdded)&&(!this.baseAdded)){
-        this.pH=(8.87+x).toString().substring(0,4);
-      }
-      this.notUpdated=false;
-    }
-    if ((this.compound==="water"&&this.notUpdated)||(this.compound==="sodium chloride"&&this.notUpdated)){
-      if (this.acidAdded){
-        this.pH=(3+x).toString().substring(0,4);
-      }
-      if (this.baseAdded){
-        this.pH=(11+x).toString().substring(0,4);
-      }
-      if ((!this.acidAdded)&&(!this.baseAdded)) {
-        this.pH=(7+x).toString().substring(0,4);
-      }
-      this.notUpdated=false;
-    }
     if (this.compound==="N/A"){
       this.pH="-.--";
+      return;
     }
+    if (!this.notUpdated) {
+      return;
+    }
+    let x = (Math.random()-0.5)/Math.pow(10,1);
+    let phConstant = COMPOUND_PH_CONSTANT[this.compound][this.adding];
+    let pH = (x+phConstant);
+    this.pH = pH.toString().substring(0, 4);
+    this.notUpdated=false;
   }
 }
